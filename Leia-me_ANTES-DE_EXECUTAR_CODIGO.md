@@ -1,0 +1,1 @@
+> *Toda vez que for executar o código "desafio_1_sistema_bancario.py", clique com o botão direito -> Executar e escolher a IDL de execução*
