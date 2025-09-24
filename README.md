@@ -23,15 +23,25 @@ __Com os novos conhecimentos adquiridos sobre data e hora, você foi encarregado
 - ser o usuário tentar fazer uma transação após atingir o limite, deve ser informado que ele excedeu o número de transações permitidas para aquele dia; e
 - mostre no extrato, a data e hora de todas as transações.
 
+ > **Data: 24/09/2025**
 
+__Desario:__
+
+
+**Orientação:**
+
+Separar as funções existentes de saque, depósito e extrato em funções. Criar duas novas funções: Cadastrar usuários (clientes) e cadastrar conta bancaria.
+
+**Objetivo:**
+
+Precisamos deixar nosso código mais modularizado, para isso vamos criar funções para as operações existentes: sacar, depositar e visualizar histórico. Além disso, deve se criar duas funções: Criar usuário (cliente do banco) e criar conta corrente (vincular com o usuário).
 
 > **Aluno: Ronaldo Ferreira dos Santos**
 
-***Obs***
+-------------------------------------------------
 
-Usei a Biblioteca json para armazenar os dados e recupera-los toda vez que for rodado o código. A Bibliteca json faz:
+O meu código est usando a Biblioteca json para armazenar os dados e recupera-los toda vez que for rodado o código. 
 
-laro! 📚
 
 A biblioteca json no Python serve para trabalhar com o formato JSON (JavaScript Object Notation), que é um formato de texto muito usado para armazenar e trocar dados entre sistemas.
 
@@ -85,5 +95,3 @@ Agora dados_carregados é um dicionário Python, e você pode manipulá-lo norma
 O que você faz	Função JSON	Resultado
 Python ➡ JSON	json.dump() ou json.dumps()	Transforma listas/dicionários em texto para salvar ou enviar
 JSON ➡ Python	json.load() ou json.loads()	Transforma texto JSON em listas/dicionários para usar no programa
-
-Quer que eu te mostre um exemplo bem simples usando essa biblioteca para salvar e carregar uma lista de clientes, como estamos fazendo no seu sistema bancário? (fica bem didático 👨‍💻)

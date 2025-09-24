@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-import json
-import os
-import sys
-from pathlib import Path
-from datetime import datetime
+import json #Carrega o módulo json, que permite trabalhar com dados no formato JSON (JavaScript Object Notation).
+import os #Carrega o módulo os, que fornece funções para interagir com o sistema operacional.
+import sys #Importa o módulo sys, que fornece acesso a variáveis e funções do interpretador Python.
+from pathlib import Path #Importa a classe Path do módulo pathlib, que facilita trabalhar com caminhos de arquivos e pastas de forma mais moderna e intuitiva que os.path.
+from datetime import datetime #Importa a classe datetime do módulo datetime, que permite trabalhar com datas e horários.
+
+
 
 def get_base_dir():
     """Retorna o diretório base para os arquivos de dados.
@@ -426,8 +428,10 @@ while True:
 
     elif opcao == "e":
         print("\n================ EXTRATO ================")
+        print(f"\thora de impressão do extrato: \n\t{datetime.now()}")
+        print()
         if CONTA_LOGADA:
-            print(f"Cliente: {cliente_atual['nome']} \n| CPF: {cliente_atual['cpf']} \n| Conta: {CONTA_LOGADA['numero']}")
+            print(f"|Cliente: {cliente_atual['nome']} \n|CPF: {cliente_atual['cpf']} \n|Conta: {CONTA_LOGADA['numero']}")
             print()
         
         # Filtra as transações para o usuário e conta logados

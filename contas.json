@@ -3,14 +3,14 @@
         "numero": "0001",
         "cpf": "12963970765",
         "nome_cliente": "Ronaldo Ferreira dos Santos",
-        "saldo": 19200.0,
+        "saldo": 24700.0,
         "saques_hoje": 1
     },
     {
         "numero": "0002",
         "cpf": "16466034780",
         "nome_cliente": "Layanne Rodrigues Farias",
-        "saldo": 49201.0,
-        "saques_hoje": 1
+        "saldo": 48201.0,
+        "saques_hoje": 2
     }
 ]
