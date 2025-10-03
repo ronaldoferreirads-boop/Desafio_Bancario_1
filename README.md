@@ -1,97 +1,65 @@
-***DESAFIO:***
+## |Análise Detalhada do Sistema Bancário em Python - o que o código faz?
 
-> **Data: 17/09/2025**
+Este documento oferece uma análise aprofundada do código de um sistema bancário desenvolvido em Python. O objetivo é dissecar sua arquitetura, funcionalidades e os conceitos de programação empregados, tornando-o um recurso didático valioso para estudantes e entusiastas da programação, especialmente aqueles que estão se aprofundando em Programação Orientada a Objetos (POO).
 
-__Criar um sistema Bancario onde terá somente as 3 operacões: Depositar, sacar e ver o extrato!__
+### |Visão Geral do Sistema
 
-**Regras:**
+O projeto implementa um sistema bancário simples, porém funcional, que permite a gestão de clientes e suas respectivas contas correntes. As operações básicas como depósito, saque e visualização de extrato estão disponíveis, além de funcionalidades administrativas como a criação de novos clientes e contas. Uma característica central do sistema é a **persistência de dados**, que garante que as informações dos clientes e contas sejam salvas e recuperadas entre as sessões de uso, utilizando arquivos no formato JSON.
 
-*Deposito* = Depositar somente valores positivos. Todos os depositos devem ser salvos em uma variavel.
+### |Funcionalidades Principais
 
-*Saque =* Deve permitir somente 3 saques diários. O limite de cada saque deve ser de R$ 500,00. Se não tiver saldo, uma mensagem deve ser exibida.
-*Extrato* = Todas as operações devem aparecer no extrato bancário. 
+O sistema oferece uma interface de linha de comando interativa, através da qual o usuário pode realizar as seguintes ações:
 
-No tinal da operação, deve exibir o saldo da conta bancaria no formato R$ xxx.xxx
+| Funcionalidade | Descrição |
+| :--- | :--- |
+| **Login de Usuário** | O sistema inicia solicitando o CPF do usuário. Caso o CPF não seja encontrado, oferece a opção de cadastrar um novo cliente e, subsequentemente, uma nova conta. |
+| **Depósito** | Permite ao usuário logado adicionar um valor monetário à sua conta. O sistema valida se o valor é positivo. |
+| **Saque** | Permite ao usuário logado retirar um valor de sua conta. Esta operação possui regras de negócio específicas, como um limite de valor por saque e um número máximo de saques diários. |
+| **Extrato** | Exibe o histórico de todas as transações (depósitos e saques) realizadas na conta do usuário logado, juntamente com o saldo final. |
+| **Criar Novo Cliente** | Cadastra uma nova pessoa física no sistema, solicitando informações como nome, data de nascimento e endereço. |
+| **Criar Nova Conta** | Cria uma nova conta corrente e a vincula a um cliente já existente (identificado pelo CPF). |
+| **Listar Contas** | Exibe uma lista de todas as contas cadastradas no banco, mostrando o número da conta, o nome do titular, o CPF e o saldo. |
+| **Persistência de Dados** | Todas as informações de clientes, contas e transações são salvas em arquivos JSON, permitindo que os dados persistam após o encerramento do programa. |
 
+### |Arquitetura e Programação Orientada a Objetos (POO)
 
+O código é estruturado de forma elegante em torno dos princípios da Programação Orientada a Objetos. As entidades do mundo real (cliente, conta, transação) são modeladas como classes, o que organiza o código, facilita a manutenção e promove o reuso.
 
-> **Data: 23/09/2025**
+> A **Programação Orientada a Objetos** é um paradigma de programação baseado no conceito de "objetos", que podem conter dados na forma de campos (atributos ou propriedades) e código, na forma de procedimentos (métodos).
 
-__Com os novos conhecimentos adquiridos sobre data e hora, você foi encarregado de implementar as seguintes funcionalidades no sistema:__
+As principais classes do sistema são:
 
-- Estabelecer um limite de 10 transações diárias para uma conta;
-- ser o usuário tentar fazer uma transação após atingir o limite, deve ser informado que ele excedeu o número de transações permitidas para aquele dia; e
-- mostre no extrato, a data e hora de todas as transações.
+- **`Cliente` e `PessoaFisica`**: A classe `Cliente` serve como uma classe base, contendo atributos gerais como `endereco`. A classe `PessoaFisica` **herda** de `Cliente` e adiciona atributos específicos para este tipo de cliente, como `nome`, `cpf` e `data_nascimento`. Isso demonstra o conceito de **herança**, um pilar da POO.
 
- > **Data: 24/09/2025**
+- **`Conta` e `ContaCorrente`**: De forma similar, `Conta` é uma classe base com os atributos e métodos fundamentais de uma conta bancária (`saldo`, `agencia`, `numero`, `depositar()`, `sacar()`). `ContaCorrente` herda de `Conta` e implementa regras de negócio específicas, como o `limite` por saque e o `limite_saques` diários. Ela **sobrescreve** o método `sacar()` para adicionar essas validações antes de chamar a implementação da classe pai com `super().sacar()`.
 
-__Desario:__
+- **`Transacao`, `Saque` e `Deposito`**: Aqui, o código utiliza uma **classe base abstrata (ABC)** chamada `Transacao`. Ela define um "contrato" que todas as transações devem seguir, obrigando as classes filhas a implementar a propriedade `valor` e o método `registrar()`. `Saque` e `Deposito` são classes concretas que herdam de `Transacao` e implementam essa interface, representando os tipos específicos de transação. Isso é um excelente exemplo de **polimorfismo**.
 
+- **`Historico`**: Esta classe é um exemplo de **composição**. Cada objeto `Conta` *tem um* objeto `Historico`, que é responsável por armazenar e gerenciar a lista de transações daquela conta.
 
-**Orientação:**
+- **`Bank`**: Esta é a classe orquestradora do sistema. Ela centraliza a lógica de negócio, gerencia as listas de clientes e contas, controla o fluxo de interação com o usuário (o menu principal) e coordena a persistência dos dados, atuando como uma fachada para todas as operações do sistema.
 
-Separar as funções existentes de saque, depósito e extrato em funções. Criar duas novas funções: Cadastrar usuários (clientes) e cadastrar conta bancaria.
+### Persistência de Dados com JSON
 
-**Objetivo:**
+Para que os dados não sejam perdidos ao fechar o programa, o sistema utiliza arquivos **JSON (JavaScript Object Notation)** para armazenamento. A classe `Bank` possui os métodos `save_all()` e `load_all()` que cuidam desse processo.
 
-Precisamos deixar nosso código mais modularizado, para isso vamos criar funções para as operações existentes: sacar, depositar e visualizar histórico. Além disso, deve se criar duas funções: Criar usuário (cliente do banco) e criar conta corrente (vincular com o usuário).
+- **`save_all()`**: Este método percorre as listas de objetos (`clientes`, `contas`) e, para cada objeto, chama um método `to_dict()`. Esse método converte o estado do objeto em um dicionário Python, que pode ser facilmente serializado para o formato JSON pela biblioteca `json` do Python.
 
-> **Aluno: Ronaldo Ferreira dos Santos**
+- **`load_all()`**: Ao iniciar o sistema, este método lê os arquivos JSON, converte os dados de volta para dicionários Python e os utiliza para reconstruir os objetos (`PessoaFisica`, `ContaCorrente`, etc.) em memória, restaurando o estado do sistema de onde ele parou.
 
--------------------------------------------------
+### Fluxo de Execução
 
-O meu código est usando a Biblioteca json para armazenar os dados e recupera-los toda vez que for rodado o código. 
+O ponto de entrada do programa (`if __name__ == "__main__":`) cria uma instância da classe `Bank` e chama o método `run()`. O fluxo principal é o seguinte:
 
+1.  **Inicialização**: O construtor da classe `Bank` é chamado, e ele imediatamente invoca `load_all()` para carregar os dados dos arquivos JSON.
+2.  **Identificação**: O método `run()` primeiro chama `identificar_usuario()`, que gerencia o processo de login via CPF.
+3.  **Loop Principal**: O sistema entra em um loop `while True`, onde a cada iteração:
+    a. O menu de opções é exibido ao usuário.
+    b. A entrada do usuário é capturada.
+    c. Uma estrutura `if/elif/else` direciona a execução para o método apropriado da classe `Bank` (por exemplo, `registrar_transacao` para depósito e saque, `mostrar_extrato`, etc.).
+4.  **Encerramento**: O loop é quebrado quando o usuário digita a opção de sair ('x'), e uma mensagem de despedida é exibida.
 
-A biblioteca json no Python serve para trabalhar com o formato JSON (JavaScript Object Notation), que é um formato de texto muito usado para armazenar e trocar dados entre sistemas.
-
-Ela faz basicamente duas coisas principais:
-
-🔑 **1. Converter objetos Python para JSON (Serialização)**
-
-Quando você tem um dicionário, lista ou outro objeto Python, pode transformá-lo em texto JSON usando json.dump() ou json.dumps().
-Isso é útil para salvar em arquivos ou enviar para APIs.
-
-Exemplo:
-
-import json
-
-dados = {"nome": "Ronaldo", "idade": 35}
-
-*Converte para JSON em texto*
-
-texto_json = json.dumps(dados, indent=4)
-print(texto_json)
+Este sistema é um excelente exemplo prático de como aplicar conceitos fundamentais e avançados de Python para construir uma aplicação de console robusta e bem estruturada. Ele não apenas resolve um problema prático, mas também serve como um material de estudo completo sobre Programação Orientada a Objetos, manipulação de arquivos e design de software.
 
 
-Saída:
 
-{
-    "nome": "Ronaldo",
-    "idade": 35
-}
-
-
-E para salvar em um arquivo:
-
-with open("dados.json", "w") as f:
-    json.dump(dados, f, indent=4)
-
-🔑 **2. Converter JSON de volta para objetos Python (Desserialização)**
-
-Quando você lê um arquivo JSON ou recebe um JSON de uma API, pode transformá-lo em um objeto Python com json.load() ou json.loads().
-
-Exemplo:
-
-with open("dados.json", "r") as f:
-    dados_carregados = json.load(f)
-
-print(dados_carregados["nome"])  # Ronaldo
-
-
-Agora dados_carregados é um dicionário Python, e você pode manipulá-lo normalmente.
-
-✅ Resumo simples
-O que você faz	Função JSON	Resultado
-Python ➡ JSON	json.dump() ou json.dumps()	Transforma listas/dicionários em texto para salvar ou enviar
-JSON ➡ Python	json.load() ou json.loads()	Transforma texto JSON em listas/dicionários para usar no programa
